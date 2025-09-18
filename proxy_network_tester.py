@@ -56,12 +56,12 @@ class ProxyConnectionTester:
         print(proxy_vars)
 
         print("Auto Proxy Vars")
-        print(auto_proxy_vars)
+        print([auto_proxy_vars])
 
         choice = input("Enter your choice (env or auto): ")
 
         if choice == "auto":
-            return proxy_vars
+            return [auto_proxy_vars]
         else:
             return proxy_vars
 
@@ -211,8 +211,8 @@ class ProxyConnectionTester:
                 potential_proxies.append(proxy_url)
         
         # Common proxy ports on localhost and common network addresses
-        common_hosts = ['127.0.0.1', 'localhost', '192.168.1.1', '10.0.0.1']
-        common_ports = [8080, 3128, 8888, 8118, 1080, 3129, 8081]
+        common_hosts = ['http://proxy.cat.com']
+        common_ports = [80]
         
         for host in common_hosts:
             for port in common_ports:
@@ -235,22 +235,6 @@ class ProxyConnectionTester:
         
         print("🔍 Starting Network Connection Tests...")
         print(f"⏱️  Timeout: {self.timeout} seconds\n")
-        
-        # Test direct connections
-        print("📡 Testing direct connections (no proxy)...")
-        for url in self.test_urls:
-            print(f"  Testing: {url}")
-            result = self.test_direct_connection(url)
-            results['direct_connections'].append(asdict(result))
-            results['summary']['total_tests'] += 1
-            if result.success:
-                results['summary']['successful_tests'] += 1
-                print(f"    ✅ Success ({result.response_time:.2f}s)")
-            else:
-                results['summary']['failed_tests'] += 1
-                print(f"    ❌ Failed: {result.error_message}")
-        
-        print()
         
         # Discover and test proxy connections
         discovered_proxies = self.discover_proxy_servers()
